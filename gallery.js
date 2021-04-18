@@ -15,8 +15,8 @@ const refs = {
   overlay: document.querySelector('.lightbox__overlay'),
   lightbox: document.querySelector('.js-lightbox'),
   closeBtn: document.querySelector('[data-action="close-lightbox"]'),
-  imgModul: document.querySelector('.lightbox__image'), 
-}
+  imgModul: document.querySelector('.lightbox__image'),
+};
 
 function createMarkUp(files) {
     return files.map(({preview, original, description}) => {
@@ -37,7 +37,6 @@ function createMarkUp(files) {
 };
 
 refs.containerGallery.insertAdjacentHTML('beforeend', createMarkUp(files));
-
 refs.containerGallery.addEventListener('click', onCreateGalleryClick);
 
 function onCreateGalleryClick(ev) {
@@ -47,15 +46,15 @@ function onCreateGalleryClick(ev) {
   ev.preventDefault();
   console.log(ev.target);
   const el = ev.target;
+  const elCurrent = ev.currentTarget;
   onOpenLightbox(el);
-   window.addEventListener('keydown', onEscPress);
+  window.addEventListener('keydown', onEscPress);
   console.log(refs.lightbox);
 }
 
-// refs.lightbox.addEventListener('click', onOpenLightbox);
 function onOpenLightbox(el) {
   refs.lightbox.classList.add('is-open');
-  refs.overlay.addEventListener('click', onOverlayClick);
+  refs.overlay.addEventListener('click', onCloseLightbox);
   refs.closeBtn.addEventListener('click', onCloseLightbox);
   refs.imgModul.src = el.dataset.source;
   refs.imgModul.alt = el.alt;
@@ -64,20 +63,11 @@ function onOpenLightbox(el) {
 
 function onCloseLightbox() {
   
+  refs.closeBtn.removeEventListener('click', onCloseLightbox);
   refs.lightbox.classList.remove('is-open');
   window.removeEventListener('keydown', onEscPress);
+  
   onClearSrc();
-};
-
-function onOverlayClick() {
-  console.log('click on overlay');
-  console.log(ev.currentTarget);
-  console.log(ev.target);
-
-  if (ev.target === ev.currentTarget) {
-    console.log('click in overlay');
-    onCloseLightbox();
-  }
 };
 
 function onEscPress(ev) {
@@ -90,3 +80,27 @@ function onClearSrc() {
    refs.imgModul.src = '';
   refs.imgModul.alt = '';
 }
+
+// //делаем перелистывания
+// const imagesSrc = [];
+
+// document.addEventListener('keydown', (ev) => {
+//   let newIndex= imagesSrc.indexOf(refs.imgModul.src);
+//   if (newIndex < 0) {
+//     return;
+//   }
+//   if (ev.code === 'ArrowLeft') {
+//     newIndex -= 1;
+//     if (newIndex===-1) {
+//       newIndex = imagesSrc.length-1;
+//     } else if (ev.code === 'ArrowRight') {
+//       newIndex += 1;
+//       if (newIndex === imagesSrc.length) {
+//         newIndex = 0;
+//       }
+//     }
+//   }
+//   imgModul.src = imagesSrc[newIndex];
+// });
+
+
